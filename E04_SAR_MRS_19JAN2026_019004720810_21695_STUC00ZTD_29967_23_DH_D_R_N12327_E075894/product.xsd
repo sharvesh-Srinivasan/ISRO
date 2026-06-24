@@ -1,0 +1,1524 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="Product">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ProductType"/>
+        <xs:element ref="ProductCopyright"/>
+        <xs:element ref="DocumentIdentifier"/>
+        <xs:element ref="DataCollectionTime"/>
+        <xs:element ref="SourceAttributes"/>
+        <xs:element ref="ImageGenerationParameters"/>
+        <xs:element ref="ImageAttributes"/>
+        <xs:element ref="CEOS-ARDProductAttributes"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProductType" type="xs:string"/>
+  <xs:element name="ProductCopyright" type="xs:string"/>
+  <xs:element name="DocumentIdentifier">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:anyURI">
+          <xs:attribute name="name" use="required"/>
+          <xs:attribute name="type" use="required" type="xs:NCName"/>
+          <xs:attribute name="version" use="required" type="xs:decimal"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DataCollectionTime">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="NumberOfAcquisitions"/>
+        <xs:element ref="FirstAcquisitionDate"/>
+        <xs:element ref="LastAcquisitionDate"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NumberOfAcquisitions" type="xs:integer"/>
+  <xs:element name="FirstAcquisitionDate" type="xs:NMTOKEN"/>
+  <xs:element name="LastAcquisitionDate" type="xs:NMTOKEN"/>
+  <xs:element name="SourceAttributes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="SourceDataRepository"/>
+        <xs:element ref="Satellite"/>
+        <xs:element ref="Instrument"/>
+        <xs:element ref="ProductID"/>
+        <xs:element ref="ImageId"/>
+        <xs:element ref="InputDatasetFacilityId"/>
+        <xs:element ref="BeamModeId"/>
+        <xs:element ref="BeamModeMnemonic"/>
+        <xs:element ref="SourceDataAcquisitionTime"/>
+        <xs:element ref="SourceDataAcquisitionParameters"/>
+        <xs:element ref="RawDataAttributes"/>
+        <xs:element ref="OrbitAndAttitude"/>
+      </xs:sequence>
+      <xs:attribute name="acqID" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SourceDataRepository">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:anyURI">
+          <xs:attribute name="type" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Satellite" type="xs:NCName"/>
+  <xs:element name="Instrument" type="xs:NCName"/>
+  <xs:element name="ProductID" type="xs:integer"/>
+  <xs:element name="ImageId" type="xs:NMTOKEN"/>
+  <xs:element name="InputDatasetFacilityId" type="xs:NCName"/>
+  <xs:element name="BeamModeId" type="xs:integer"/>
+  <xs:element name="BeamModeMnemonic" type="xs:NCName"/>
+  <xs:element name="SourceDataAcquisitionTime">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="StartTime"/>
+        <xs:element ref="EndTime"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StartTime" type="xs:NMTOKEN"/>
+  <xs:element name="EndTime" type="xs:NMTOKEN"/>
+  <xs:element name="SourceDataAcquisitionParameters">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ObservationMode"/>
+        <xs:element ref="BeamID"/>
+        <xs:element ref="Polarizations"/>
+        <xs:element maxOccurs="unbounded" ref="PulsesReceivedPerDwell"/>
+        <xs:element ref="RadarBand"/>
+        <xs:element ref="RadarCenterFrequency"/>
+        <xs:element maxOccurs="unbounded" ref="PulseRepetitionFrequency"/>
+        <xs:element ref="PulseLength"/>
+        <xs:element ref="PulseBandwidth"/>
+        <xs:element ref="AntennaPointing"/>
+        <xs:element ref="AdcSamplingRate"/>
+        <xs:element ref="YawSteeringFlag"/>
+        <xs:element ref="GeodeticFlag"/>
+        <xs:element ref="RawBitsPerSample"/>
+        <xs:element maxOccurs="unbounded" ref="SamplesPerEchoLine"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObservationMode" type="xs:NCName"/>
+  <xs:element name="BeamID" type="xs:string"/>
+  <xs:element name="Polarizations" type="xs:string"/>
+  <xs:element name="PulsesReceivedPerDwell">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:integer">
+          <xs:attribute name="beam" use="required" type="xs:decimal"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RadarBand" type="xs:NCName"/>
+  <xs:element name="RadarCenterFrequency">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:double">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PulseRepetitionFrequency">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="beam" use="required" type="xs:decimal"/>
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PulseLength">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:double">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PulseBandwidth">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:integer">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AntennaPointing" type="xs:NCName"/>
+  <xs:element name="AdcSamplingRate">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="YawSteeringFlag" type="xs:NCName"/>
+  <xs:element name="GeodeticFlag" type="xs:NCName"/>
+  <xs:element name="RawBitsPerSample" type="xs:integer"/>
+  <xs:element name="SamplesPerEchoLine">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:integer">
+          <xs:attribute name="beam" use="required" type="xs:decimal"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RawDataAttributes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="RawDataAnalysis"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RawDataAnalysis">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="Bias"/>
+        <xs:element maxOccurs="unbounded" ref="StandardDeviation"/>
+        <xs:element ref="GainImbalance"/>
+        <xs:element ref="PhaseOrthogonality"/>
+        <xs:element maxOccurs="unbounded" ref="RawDataHistogram"/>
+      </xs:sequence>
+      <xs:attribute name="pol" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Bias">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="dataStream" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GainImbalance" type="xs:decimal"/>
+  <xs:element name="PhaseOrthogonality">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RawDataHistogram">
+    <xs:complexType mixed="true">
+      <xs:attribute name="dataStream" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OrbitAndAttitude">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="OrbitInformation"/>
+        <xs:element ref="AttitudeInformation"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OrbitInformation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="PassDirection"/>
+        <xs:element ref="OrbitDataSource"/>
+        <xs:element ref="OrbitNumber"/>
+        <xs:element maxOccurs="unbounded" ref="StateVector"/>
+        <xs:element maxOccurs="unbounded" ref="StateVectorECEF"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PassDirection" type="xs:NCName"/>
+  <xs:element name="OrbitDataSource" type="xs:NCName"/>
+  <xs:element name="OrbitNumber" type="xs:integer"/>
+  <xs:element name="StateVector">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="TimeStamp"/>
+        <xs:element ref="xPosition"/>
+        <xs:element ref="yPosition"/>
+        <xs:element ref="zPosition"/>
+        <xs:element ref="xVelocity"/>
+        <xs:element ref="yVelocity"/>
+        <xs:element ref="zVelocity"/>
+        <xs:element ref="siderealangle"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="siderealangle">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StateVectorECEF">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="TimeStamp"/>
+        <xs:element ref="xPosition"/>
+        <xs:element ref="yPosition"/>
+        <xs:element ref="zPosition"/>
+        <xs:element ref="xVelocity"/>
+        <xs:element ref="yVelocity"/>
+        <xs:element ref="zVelocity"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AttitudeInformation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="AttitudeDataSource"/>
+        <xs:element ref="AttitudeOffsetsApplied"/>
+        <xs:element maxOccurs="unbounded" ref="AttitudeAngles"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AttitudeDataSource" type="xs:string"/>
+  <xs:element name="AttitudeOffsetsApplied" type="xs:boolean"/>
+  <xs:element name="AttitudeAngles">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="TimeStamp"/>
+        <xs:element ref="yaw"/>
+        <xs:element ref="roll"/>
+        <xs:element ref="pitch"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="yaw">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="roll">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="pitch">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ImageGenerationParameters">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="SourceProcParam"/>
+        <xs:element ref="SarProcessingInformation"/>
+        <xs:element ref="DopplerCentroid"/>
+        <xs:element ref="DopplerRateValues"/>
+        <xs:element maxOccurs="unbounded" ref="Chirp"/>
+        <xs:element maxOccurs="unbounded" ref="PerformanceIndicators"/>
+        <xs:element ref="SlantRangeToGroundRange"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SourceProcParam">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ProductLevel"/>
+        <xs:element ref="ProcessingFacility"/>
+        <xs:element ref="ProcessingDate"/>
+        <xs:element ref="SoftwareVersion"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProductLevel" type="xs:NCName"/>
+  <xs:element name="ProcessingDate" type="xs:NMTOKEN"/>
+  <xs:element name="SarProcessingInformation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="lutApplied"/>
+        <xs:element ref="ElevationPatternCorrection"/>
+        <xs:element ref="RawDataCorrection"/>
+        <xs:element ref="RangeReferenceFunctionSource"/>
+        <xs:element ref="DopplerSource"/>
+        <xs:element ref="DopplerAmbiguityComputed"/>
+        <xs:element ref="DopplerAmbiguityUsed"/>
+        <xs:element ref="EstimatedRollAngleUsed"/>
+        <xs:element ref="RadiometricSmoothingPerformed"/>
+        <xs:element ref="ZeroDopplerTimeFirstLine"/>
+        <xs:element ref="ZeroDopplerTimeLastLine"/>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element ref="NumberOfLinesProcessed"/>
+          <xs:element ref="NumberOfMissingLines"/>
+        </xs:choice>
+        <xs:element maxOccurs="unbounded" ref="SamplingWindowStartTimeFirstRawLine"/>
+        <xs:element maxOccurs="unbounded" ref="SamplingWindowStartTimeLastRawLine"/>
+        <xs:element maxOccurs="unbounded" ref="NumberOfSwstChanges"/>
+        <xs:element ref="RangeNumberOfLooks"/>
+        <xs:element ref="RangeLookBandwidth"/>
+        <xs:element ref="TotalProcessedRangeBandwidth"/>
+        <xs:element ref="AzimuthNumberOfLooks"/>
+        <xs:element ref="AzimuthLookBandwidth"/>
+        <xs:element ref="TotalProcessedAzimuthBandwidth"/>
+        <xs:element ref="AzimuthWindow"/>
+        <xs:element ref="RangeWindow"/>
+        <xs:element ref="SourceDataGeometry"/>
+        <xs:element ref="SourceGeographicalExtent"/>
+        <xs:element ref="AzimuthPixelSpacing"/>
+        <xs:element ref="RangePixelSpacing"/>
+        <xs:element ref="AzimuthResolution"/>
+        <xs:element ref="RangeResolution"/>
+        <xs:element ref="IncAngleNearRange"/>
+        <xs:element ref="IncAngleFarRange"/>
+        <xs:element ref="SlantRangeNearEdge"/>
+        <xs:element ref="SatelliteHeight"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="lutApplied" type="xs:NCName"/>
+  <xs:element name="ElevationPatternCorrection" type="xs:boolean"/>
+  <xs:element name="RawDataCorrection" type="xs:boolean"/>
+  <xs:element name="RangeReferenceFunctionSource" type="xs:string"/>
+  <xs:element name="DopplerSource" type="xs:NCName"/>
+  <xs:element name="DopplerAmbiguityComputed" type="xs:boolean"/>
+  <xs:element name="DopplerAmbiguityUsed" type="xs:boolean"/>
+  <xs:element name="EstimatedRollAngleUsed" type="xs:boolean"/>
+  <xs:element name="RadiometricSmoothingPerformed" type="xs:boolean"/>
+  <xs:element name="ZeroDopplerTimeFirstLine" type="xs:NMTOKEN"/>
+  <xs:element name="ZeroDopplerTimeLastLine" type="xs:NMTOKEN"/>
+  <xs:element name="NumberOfLinesProcessed">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:integer">
+          <xs:attribute name="pol" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NumberOfMissingLines">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:integer">
+          <xs:attribute name="pol" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SamplingWindowStartTimeFirstRawLine">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="beam" use="required" type="xs:decimal"/>
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SamplingWindowStartTimeLastRawLine">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="beam" use="required" type="xs:decimal"/>
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NumberOfSwstChanges">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:integer">
+          <xs:attribute name="beam" use="required" type="xs:decimal"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RangeNumberOfLooks" type="xs:integer"/>
+  <xs:element name="RangeLookBandwidth">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TotalProcessedRangeBandwidth">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AzimuthNumberOfLooks" type="xs:integer"/>
+  <xs:element name="AzimuthLookBandwidth">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TotalProcessedAzimuthBandwidth">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AzimuthWindow">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="WindowName"/>
+        <xs:element ref="WindowCoefficient"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RangeWindow">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="WindowName"/>
+        <xs:element ref="WindowCoefficient"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SourceDataGeometry" type="xs:string"/>
+  <xs:element name="SourceGeographicalExtent">
+    <xs:complexType mixed="true">
+      <xs:attribute name="type" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AzimuthPixelSpacing">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RangePixelSpacing">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AzimuthResolution">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RangeResolution">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IncAngleNearRange">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IncAngleFarRange">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SlantRangeNearEdge">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SatelliteHeight">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DopplerCentroid">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="TimeOfDopplerCentroidEstimate"/>
+        <xs:element ref="DopplerAmbiguity"/>
+        <xs:element ref="DopplerCentroidPolynomialPeriod"/>
+        <xs:element ref="DopplerCentroidCoefficients"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TimeOfDopplerCentroidEstimate" type="xs:NMTOKEN"/>
+  <xs:element name="DopplerAmbiguity" type="xs:integer"/>
+  <xs:element name="DopplerCentroidPolynomialPeriod">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:integer">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DopplerCentroidCoefficients" type="xs:string"/>
+  <xs:element name="DopplerRateValues">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="DopplerRateReferenceTime"/>
+        <xs:element ref="DopplerRateValuesCoefficients"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DopplerRateReferenceTime" type="xs:NMTOKEN"/>
+  <xs:element name="DopplerRateValuesCoefficients">
+    <xs:complexType mixed="true">
+      <xs:attribute name="units" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Chirp">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ChirpQuality"/>
+      </xs:sequence>
+      <xs:attribute name="pol" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ChirpQuality">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="CrossCorrelationWidth"/>
+        <xs:element ref="SideLobeLevel"/>
+        <xs:element ref="IntegratedSideLobeRatio"/>
+        <xs:element ref="CrossCorrelationPeakLoc"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CrossCorrelationWidth" type="xs:decimal"/>
+  <xs:element name="SideLobeLevel">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IntegratedSideLobeRatio">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CrossCorrelationPeakLoc" type="xs:decimal"/>
+  <xs:element name="PerformanceIndicators">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="NoiseEquivalentIntensity"/>
+      </xs:sequence>
+      <xs:attribute name="pol" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NoiseEquivalentIntensity">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Estimates"/>
+      </xs:sequence>
+      <xs:attribute name="type" use="required" type="xs:NCName"/>
+      <xs:attribute name="units" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Estimates">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="type" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SlantRangeToGroundRange">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ZeroDopplerAzimuthTime"/>
+        <xs:element ref="SlantRangeTimeToFirstRangeSample"/>
+        <xs:element ref="SlantToGroundRangeCoefficients"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ZeroDopplerAzimuthTime" type="xs:NMTOKEN"/>
+  <xs:element name="SlantRangeTimeToFirstRangeSample">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SlantToGroundRangeCoefficients">
+    <xs:complexType mixed="true">
+      <xs:attribute name="units" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ImageAttributes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ProductFormat"/>
+        <xs:element ref="OutputMediaInterleaving"/>
+        <xs:element ref="RasterAttributes"/>
+        <xs:element ref="GeographicInformation"/>
+        <xs:element maxOccurs="unbounded" ref="RadiometricInformation"/>
+        <xs:element maxOccurs="unbounded" ref="CalibrationConstant"/>
+        <xs:element maxOccurs="unbounded" ref="CalibrationConstant_Gamma0"/>
+        <xs:element maxOccurs="unbounded" ref="CalibrationConstant_Beta0"/>
+        <xs:element ref="CP_Relative_Phase_Imbalance"/>
+        <xs:element ref="CP_Relative_Channel_Imbalance"/>
+        <xs:element ref="FP_Transmit_Phase_Imbalance"/>
+        <xs:element ref="FP_Receive_Phase_Imbalance"/>
+        <xs:element ref="FP_Copol_Channel_Imbalance"/>
+        <xs:element ref="FP_Crosspol_Channel_Imbalance"/>
+        <xs:element ref="Image_CP_Relative_Phase_Imbalance"/>
+        <xs:element ref="Image_CP_Relative_Channel_Imbalance"/>
+        <xs:element ref="Image_FP_CoPol_Phase_Imbalance"/>
+        <xs:element ref="Image_FP_CrossPol_Phase_Imbalance"/>
+        <xs:element ref="Image_FP_Copol_Channel_Imbalance"/>
+        <xs:element ref="Image_FP_Crosspol_Channel_Imbalance"/>
+        <xs:element ref="Image_Registration_Status"/>
+        <xs:element ref="Image_Range_Error_Meters"/>
+        <xs:element ref="Image_Time_Error_Meters"/>
+        <xs:element ref="Image_Time_Error_Seconds"/>
+        <xs:element maxOccurs="unbounded" ref="FullResolutionImageData"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProductFormat" type="xs:NCName"/>
+  <xs:element name="OutputMediaInterleaving" type="xs:NCName"/>
+  <xs:element name="RasterAttributes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="DataType"/>
+        <xs:element ref="BitsPerSample"/>
+        <xs:element ref="NumberOfSamplesPerLine"/>
+        <xs:element ref="NumberOfLines"/>
+        <xs:element ref="SampledPixelSpacing"/>
+        <xs:element ref="SampledLineSpacing"/>
+        <xs:element ref="LineTimeOrdering"/>
+        <xs:element ref="PixelTimeOrdering"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NumberOfSamplesPerLine" type="xs:integer"/>
+  <xs:element name="NumberOfLines" type="xs:integer"/>
+  <xs:element name="SampledPixelSpacing">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SampledLineSpacing">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LineTimeOrdering" type="xs:NCName"/>
+  <xs:element name="PixelTimeOrdering" type="xs:NCName"/>
+  <xs:element name="GeographicInformation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="GeolocationGrid"/>
+        <xs:element ref="ReferenceEllipsoidParameters"/>
+        <xs:element ref="MapProjection"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GeolocationGrid">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="ImageTiePoint"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ImageTiePoint">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ImageCoordinate"/>
+        <xs:element ref="GeodeticCoordinate"/>
+        <xs:element ref="MapCoordinate"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ImageCoordinate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Line"/>
+        <xs:element ref="Pixel"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Line" type="xs:decimal"/>
+  <xs:element name="Pixel" type="xs:decimal"/>
+  <xs:element name="GeodeticCoordinate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Latitude"/>
+        <xs:element ref="Longitude"/>
+        <xs:element ref="Height"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MapCoordinate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Northing"/>
+        <xs:element ref="Easting"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReferenceEllipsoidParameters">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="EllipsoidName"/>
+        <xs:element ref="SemiMajorAxis"/>
+        <xs:element ref="SemiMinorAxis"/>
+        <xs:element ref="DatumShiftParameters"/>
+        <xs:element ref="GeodeticTerrainHeight"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EllipsoidName" type="xs:NCName"/>
+  <xs:element name="SemiMajorAxis">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:double">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SemiMinorAxis">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:double">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DatumShiftParameters">
+    <xs:complexType mixed="true">
+      <xs:attribute name="units" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GeodeticTerrainHeight">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MapProjection">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="MapProjectionDescriptor"/>
+        <xs:element ref="ResamplingKernel"/>
+        <xs:element ref="DEMCorrection"/>
+        <xs:element ref="DEMSource"/>
+        <xs:element ref="SatelliteHeading"/>
+        <xs:element ref="UTMProjection"/>
+        <xs:element ref="MapCorners"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MapProjectionDescriptor" type="xs:NCName"/>
+  <xs:element name="ResamplingKernel" type="xs:NCName"/>
+  <xs:element name="DEMCorrection" type="xs:NCName"/>
+  <xs:element name="DEMSource" type="xs:NCName"/>
+  <xs:element name="SatelliteHeading">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UTMProjection">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="UtmZone"/>
+        <xs:element ref="Hemisphere"/>
+        <xs:element ref="MapOriginFalseEasting"/>
+        <xs:element ref="MapOriginFalseNorthing"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UtmZone" type="xs:integer"/>
+  <xs:element name="Hemisphere" type="xs:NCName"/>
+  <xs:element name="MapOriginFalseEasting">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MapOriginFalseNorthing">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MapCorners">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="UpperLeftCorner"/>
+        <xs:element ref="UpperRightCorner"/>
+        <xs:element ref="LowerRightCorner"/>
+        <xs:element ref="LowerLeftCorner"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpperLeftCorner">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Latitude"/>
+        <xs:element ref="Longitude"/>
+        <xs:element ref="Northing"/>
+        <xs:element ref="Easting"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpperRightCorner">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Latitude"/>
+        <xs:element ref="Longitude"/>
+        <xs:element ref="Northing"/>
+        <xs:element ref="Easting"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LowerRightCorner">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Latitude"/>
+        <xs:element ref="Longitude"/>
+        <xs:element ref="Northing"/>
+        <xs:element ref="Easting"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LowerLeftCorner">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Latitude"/>
+        <xs:element ref="Longitude"/>
+        <xs:element ref="Northing"/>
+        <xs:element ref="Easting"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RadiometricInformation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Mean"/>
+        <xs:element ref="StandardDeviation"/>
+      </xs:sequence>
+      <xs:attribute name="pol" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Mean">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="datastream" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CalibrationConstant">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="pol" use="required" type="xs:NCName"/>
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CalibrationConstant_Gamma0">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="pol" use="required" type="xs:NCName"/>
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CalibrationConstant_Beta0">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="pol" use="required" type="xs:NCName"/>
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CP_Relative_Phase_Imbalance" type="xs:decimal"/>
+  <xs:element name="CP_Relative_Channel_Imbalance" type="xs:decimal"/>
+  <xs:element name="FP_Transmit_Phase_Imbalance" type="xs:decimal"/>
+  <xs:element name="FP_Receive_Phase_Imbalance" type="xs:decimal"/>
+  <xs:element name="FP_Copol_Channel_Imbalance" type="xs:decimal"/>
+  <xs:element name="FP_Crosspol_Channel_Imbalance" type="xs:decimal"/>
+  <xs:element name="Image_CP_Relative_Phase_Imbalance" type="xs:decimal"/>
+  <xs:element name="Image_CP_Relative_Channel_Imbalance" type="xs:decimal"/>
+  <xs:element name="Image_FP_CoPol_Phase_Imbalance" type="xs:decimal"/>
+  <xs:element name="Image_FP_CrossPol_Phase_Imbalance" type="xs:decimal"/>
+  <xs:element name="Image_FP_Copol_Channel_Imbalance" type="xs:decimal"/>
+  <xs:element name="Image_FP_Crosspol_Channel_Imbalance" type="xs:decimal"/>
+  <xs:element name="Image_Registration_Status" type="xs:integer"/>
+  <xs:element name="Image_Range_Error_Meters" type="xs:decimal"/>
+  <xs:element name="Image_Time_Error_Meters" type="xs:decimal"/>
+  <xs:element name="Image_Time_Error_Seconds" type="xs:decimal"/>
+  <xs:element name="FullResolutionImageData">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:NCName">
+          <xs:attribute name="pol" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CEOS-ARDProductAttributes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="DataAccess"/>
+        <xs:element ref="ProductSampleSpacing"/>
+        <xs:element ref="Filtering"/>
+        <xs:element maxOccurs="unbounded" ref="ProductBoundingBox"/>
+        <xs:element ref="ProductGeographicalExtent"/>
+        <xs:element ref="ProductImageSize"/>
+        <xs:element ref="PixelCoordinateConvention"/>
+        <xs:element maxOccurs="unbounded" ref="CoordinateReferenceSystem"/>
+        <xs:element ref="PerPixelMetadata"/>
+        <xs:element maxOccurs="unbounded" ref="BackscatterMeasurementData"/>
+        <xs:element ref="NoiseRemoval"/>
+        <xs:element ref="RadiometricTerrainCorrections"/>
+        <xs:element ref="GeometricCorrections"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DataAccess">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ProcessingFacility"/>
+        <xs:element ref="ProcessingTime"/>
+        <xs:element ref="SoftwareVersion"/>
+        <xs:element ref="Repository"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProcessingTime">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:NMTOKEN">
+          <xs:attribute name="TimeZone" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Repository">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:anyURI">
+          <xs:attribute name="type" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProductSampleSpacing">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ProductColumnSpacing"/>
+        <xs:element ref="ProductRowSpacing"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProductColumnSpacing">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProductRowSpacing">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Filtering">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="FilterApplied"/>
+        <xs:element ref="FilterType"/>
+        <xs:element ref="WindowSizeCol"/>
+        <xs:element ref="WindowSizeLine"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FilterApplied" type="xs:NCName"/>
+  <xs:element name="FilterType" type="xs:string"/>
+  <xs:element name="WindowSizeCol" type="xs:string"/>
+  <xs:element name="WindowSizeLine" type="xs:string"/>
+  <xs:element name="ProductBoundingBox">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Northing"/>
+        <xs:element ref="Easting"/>
+        <xs:element ref="Height"/>
+      </xs:sequence>
+      <xs:attribute name="Corner" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProductGeographicalExtent">
+    <xs:complexType mixed="true">
+      <xs:attribute name="order" use="required"/>
+      <xs:attribute name="type" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProductImageSize">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="NumberLines"/>
+        <xs:element ref="NumPixelsPerLine"/>
+        <xs:element ref="HeaderSize"/>
+        <xs:element ref="NumBorderPixels"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NumberLines" type="xs:integer"/>
+  <xs:element name="NumPixelsPerLine" type="xs:integer"/>
+  <xs:element name="HeaderSize">
+    <xs:complexType mixed="true">
+      <xs:attribute name="units" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NumBorderPixels" type="xs:string"/>
+  <xs:element name="PixelCoordinateConvention" type="xs:NCName"/>
+  <xs:element name="CoordinateReferenceSystem">
+    <xs:complexType mixed="true">
+      <xs:attribute name="type" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PerPixelMetadata">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="DataMask"/>
+        <xs:element ref="LocalIncAngle"/>
+        <xs:element ref="LocalContributingArea"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DataMask">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="FileName"/>
+        <xs:element ref="SampleType"/>
+        <xs:element ref="DataFormat"/>
+        <xs:element ref="DataType"/>
+        <xs:element ref="BitsPerSample"/>
+        <xs:element ref="ByteOrder"/>
+        <xs:element ref="BitValues"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LocalIncAngle">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="FileName"/>
+        <xs:element ref="SampleType"/>
+        <xs:element ref="DataFormat"/>
+        <xs:element ref="DataType"/>
+        <xs:element ref="BitsPerSample"/>
+        <xs:element ref="ByteOrder"/>
+        <xs:element ref="BitValues"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LocalContributingArea">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="FileName"/>
+        <xs:element ref="SampleType"/>
+        <xs:element ref="DataFormat"/>
+        <xs:element ref="DataType"/>
+        <xs:element ref="BitsPerSample"/>
+        <xs:element ref="ByteOrder"/>
+        <xs:element ref="BitValues"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BackscatterMeasurementData">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="BackscatterMeasurement"/>
+        <xs:element ref="BackscatterConvention"/>
+        <xs:element ref="BackscatterConversionEq"/>
+        <xs:element ref="Polarization"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BackscatterMeasurement" type="xs:NCName"/>
+  <xs:element name="BackscatterConvention" type="xs:string"/>
+  <xs:element name="BackscatterConversionEq">
+    <xs:complexType mixed="true">
+      <xs:attribute name="units" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Polarization">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="FileName"/>
+        <xs:element ref="DataFormat"/>
+        <xs:element ref="DataType"/>
+        <xs:element ref="BitsPerSample"/>
+        <xs:element ref="ByteOrder"/>
+        <xs:element ref="BitValues"/>
+      </xs:sequence>
+      <xs:attribute name="pol" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NoiseRemoval">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="NoiseRemovalApplied"/>
+        <xs:element ref="NRAlgorithm"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NoiseRemovalApplied" type="xs:NCName"/>
+  <xs:element name="NRAlgorithm">
+    <xs:complexType mixed="true">
+      <xs:attribute name="type" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RadiometricTerrainCorrections">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="RTCAlgorithm"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RTCAlgorithm">
+    <xs:complexType mixed="true">
+      <xs:attribute name="type" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GeometricCorrections">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="DigitalElevationModel"/>
+        <xs:element ref="GeoCorrAccuracy"/>
+        <xs:element ref="GriddingConvention"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DigitalElevationModel">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="DEMReference"/>
+        <xs:element ref="EGMReference"/>
+      </xs:sequence>
+      <xs:attribute name="dem" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DEMReference">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:anyURI">
+          <xs:attribute name="type" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EGMReference">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:anyURI">
+          <xs:attribute name="type" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GeoCorrAccuracy">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="NorthernBias"/>
+        <xs:element ref="EasternBias"/>
+        <xs:element ref="NorthernSTDev"/>
+        <xs:element ref="EasternSTDev"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NorthernBias">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EasternBias">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NorthernSTDev">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EasternSTDev">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GriddingConvention">
+    <xs:complexType mixed="true">
+      <xs:attribute name="type" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StandardDeviation">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="dataStream" type="xs:NCName"/>
+          <xs:attribute name="datastream" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TimeStamp" type="xs:NMTOKEN"/>
+  <xs:element name="xPosition">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="yPosition">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="zPosition">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="xVelocity">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="yVelocity">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="zVelocity">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProcessingFacility" type="xs:NCName"/>
+  <xs:element name="SoftwareVersion" type="xs:NMTOKEN"/>
+  <xs:element name="WindowName" type="xs:NCName"/>
+  <xs:element name="WindowCoefficient" type="xs:decimal"/>
+  <xs:element name="DataType" type="xs:string"/>
+  <xs:element name="BitsPerSample">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:integer">
+          <xs:attribute name="datastream" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Latitude">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Longitude">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Height">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Northing">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Easting">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="units" use="required" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FileName" type="xs:string"/>
+  <xs:element name="SampleType">
+    <xs:complexType mixed="true">
+      <xs:attribute name="units" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DataFormat" type="xs:NCName"/>
+  <xs:element name="ByteOrder" type="xs:string"/>
+  <xs:element name="BitValues">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:sequence minOccurs="0">
+          <xs:element ref="ValidData"/>
+          <xs:element ref="InvalidData"/>
+        </xs:sequence>
+        <xs:element ref="NoData"/>
+        <xs:sequence minOccurs="0">
+          <xs:element ref="Layover"/>
+          <xs:element ref="Shadow"/>
+        </xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ValidData" type="xs:integer"/>
+  <xs:element name="InvalidData" type="xs:string"/>
+  <xs:element name="NoData" type="xs:decimal"/>
+  <xs:element name="Layover" type="xs:integer"/>
+  <xs:element name="Shadow" type="xs:integer"/>
+</xs:schema>
