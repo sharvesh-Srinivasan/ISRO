@@ -22,8 +22,9 @@ type Classification = {
   water_px: number; land_px: number; crop_px: number; mountain_px: number;
 };
 type QualityMetrics = { snr: number; entropy_bits: number; process_ms: number; dynamic_range_db: number };
+type ModelMetric = { Model: string; Accuracy: number; Mean_IoU: number; F1_Score: number; Latency_ms: number };
 type ProcessData = {
-  images: { raw: string; stretched: string; mask: string; unet: string; cnn: string; vision: string };
+  images: { raw: string; stretched: string; mask: string; unet: string; cnn: string; vision: string; rf: string };
   file_metadata: FileMetadata;
   raw_array_stats: ArrayStats;
   db_stats: DbStats;
@@ -33,6 +34,7 @@ type ProcessData = {
   histogram: { bin: number; count: number }[];
   raw_histogram: { bin: number; count: number }[];
   synth: { method: string; desc: string; raw_label: string };
+  model_metrics: ModelMetric[];
 };
 
 // ── Class legend ──────────────────────────────────────────────────────────────
@@ -44,13 +46,13 @@ const CLASSES = [
 ] as const;
 
 export default function Home() {
-  const [band, setBand]               = useState<"L" | "C" | "S">("C");
-  const [hhPath, setHhPath]           = useState<string>("d:\\ISRO\\Proj\\E04_HH_tiles");
-  const [hvPath, setHvPath]           = useState<string>("d:\\ISRO\\Proj\\E04_HV_tiles");
+  const [band, setBand]               = useState<"L" | "C" | "S">("L");
+  const [hhPath, setHhPath]           = useState<string>("d:\\ISRO\\Proj\\HH.tif");
+  const [hvPath, setHvPath]           = useState<string>("d:\\ISRO\\Proj\\HV.tif");
   const [state, setState]             = useState<"IDLE" | "PROCESSING" | "COMPLETE">("IDLE");
   const [data, setData]               = useState<ProcessData | null>(null);
   const [error, setError]             = useState("");
-  const [tab, setTab]                 = useState<"RAW" | "STRETCHED" | "MASK" | "UNET" | "CNN" | "VISION">("RAW");
+  const [tab, setTab]                 = useState<"RAW" | "STRETCHED" | "MASK" | "UNET" | "CNN" | "VISION" | "RF">("RAW");
 
   const run = async () => {
     if (!hhPath || !hvPath) { setError("Both HH and HV paths must be provided."); return; }
@@ -60,7 +62,13 @@ export default function Home() {
     fd.append("hv_path", hvPath);
     fd.append("band", band);
     try {
-      const res  = await fetch("http://localhost:5000/api/process", { method: "POST", body: fd });
+      const res  = await fetch("http://127.0.0.1:5000/api/process", { 
+        method: "POST", 
+        body: fd,
+        headers: {
+          "Bypass-Tunnel-Reminder": "true"
+        }
+      });
       const json = await res.json();
       if (json.error) throw new Error(json.error);
       setData(json); setState("COMPLETE"); setTab("RAW");
@@ -92,6 +100,9 @@ export default function Home() {
                   setHhPath("d:\\ISRO\\Proj\\E04_HH_tiles");
                   setHvPath("d:\\ISRO\\Proj\\E04_HV_tiles");
                 } else if (b === "L") {
+                  setHhPath("d:\\ISRO\\Proj\\HH.tif");
+                  setHvPath("d:\\ISRO\\Proj\\HV.tif");
+                } else {
                   setHhPath("d:\\ISRO\\Proj\\HH.tif");
                   setHvPath("d:\\ISRO\\Proj\\HV.tif");
                 }
@@ -208,14 +219,15 @@ export default function Home() {
               {/* Image Viewer */}
               <section className="card canvas-card">
                 <div className="tab-bar">
-                  {(["RAW","STRETCHED","MASK","UNET","CNN","VISION"] as const).map(t => (
+                  {(["RAW","STRETCHED","MASK","UNET","CNN","VISION","RF"] as const).map(t => (
                     <button key={t} onClick={() => setTab(t)}
                       className={tab === t ? "tab active" : "tab"}>
                       {t === "RAW" ? "01 Raw " + (data.synth?.raw_label || "HH") : 
                        t === "STRETCHED" ? "02 Composite" : 
                        t === "MASK" ? "03 K-Means" :
                        t === "UNET" ? "04 U-Net" :
-                       t === "CNN" ? "05 CNN" : "06 Vision"}
+                       t === "CNN" ? "05 CNN" : 
+                       t === "VISION" ? "06 Vision" : "07 RF"}
                     </button>
                   ))}
                 </div>
@@ -226,7 +238,7 @@ export default function Home() {
                          tab === "MASK" ? data.images.mask :
                          tab === "UNET" ? data.images.unet :
                          tab === "CNN" ? data.images.cnn :
-                         data.images.vision} />
+                         tab === "VISION" ? data.images.vision : data.images.rf} />
                   <div className="img-overlay">
                     <span>{data.file_metadata.resolution} px · {band}-Band</span>
                     <span>{tab === "RAW" ? "Linear amplitude stretch" : 
@@ -234,7 +246,7 @@ export default function Home() {
                            tab === "MASK" ? "Threshold K-means segmentation" :
                            tab === "UNET" ? "U-Net Semantic Segmentation" :
                            tab === "CNN" ? "FCN-CNN Semantic Segmentation" :
-                           "Vision Transformer Segmentation"}</span>
+                           tab === "VISION" ? "Vision Transformer Segmentation" : "Random Forest Classifier"}</span>
                   </div>
                 </div>
               </section>
@@ -337,6 +349,35 @@ export default function Home() {
                       <div className="class-px">{((data.classification as any)[cls.pxKey] as number).toLocaleString()} px</div>
                     </div>
                   ))}
+                </div>
+              </section>
+
+              {/* Model Performance Metrics */}
+              <section className="card">
+                <div className="card-header">MODEL PERFORMANCE METRICS</div>
+                <div style={{ padding: "12px 16px" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "11px", textAlign: "left" }}>
+                    <thead>
+                      <tr style={{ color: "#666", borderBottom: "1px solid #222" }}>
+                        <th style={{ paddingBottom: "6px", fontWeight: 500 }}>Model</th>
+                        <th style={{ paddingBottom: "6px", fontWeight: 500 }}>Acc</th>
+                        <th style={{ paddingBottom: "6px", fontWeight: 500 }}>IoU</th>
+                        <th style={{ paddingBottom: "6px", fontWeight: 500 }}>F1</th>
+                        <th style={{ paddingBottom: "6px", textAlign: "right", fontWeight: 500 }}>Latency</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.model_metrics?.map(m => (
+                        <tr key={m.Model} style={{ borderBottom: "1px solid #111" }}>
+                          <td style={{ color: "#aaa", padding: "6px 0" }}>{m.Model}</td>
+                          <td style={{ color: "#e8e8e8", fontFamily: "monospace" }}>{m.Accuracy.toFixed(3)}</td>
+                          <td style={{ color: "#e8e8e8", fontFamily: "monospace" }}>{m.Mean_IoU.toFixed(3)}</td>
+                          <td style={{ color: "#e8e8e8", fontFamily: "monospace" }}>{m.F1_Score.toFixed(3)}</td>
+                          <td style={{ color: "#e67e22", fontFamily: "monospace", textAlign: "right" }}>{m.Latency_ms}ms</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </section>
 

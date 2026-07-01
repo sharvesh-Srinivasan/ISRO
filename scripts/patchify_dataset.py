@@ -33,8 +33,8 @@ def patchify_large_tif(input_tif, output_folder, patch_size=256):
                 # Read the data in this specific window
                 patch_data = src.read(window=window)
                 
-                # Optional: Skip tiles that are purely empty "Nodata" (NaN or 0)
-                if np.all(patch_data <= 0) or np.isnan(patch_data).all():
+                # Automatically delete/skip completely black tiles or Nodata
+                if np.max(patch_data) <= 0 or np.isnan(patch_data).all() or np.all(patch_data == 0):
                     continue
                 
                 # Update the geospatial metadata for this specific tile
