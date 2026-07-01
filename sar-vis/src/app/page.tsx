@@ -24,7 +24,7 @@ type Classification = {
 type QualityMetrics = { snr: number; entropy_bits: number; process_ms: number; dynamic_range_db: number };
 type ModelMetric = { Model: string; Accuracy: number; Mean_IoU: number; F1_Score: number; Latency_ms: number };
 type ProcessData = {
-  images: { raw: string; stretched: string; mask: string; unet: string; cnn: string; vision: string; rf: string };
+  images: { raw: string; rgb: string; stretched: string; mask: string; unet: string; cnn: string; vision: string; rf: string };
   file_metadata: FileMetadata;
   raw_array_stats: ArrayStats;
   db_stats: DbStats;
@@ -46,13 +46,13 @@ const CLASSES = [
 ] as const;
 
 export default function Home() {
-  const [band, setBand]               = useState<"L" | "C" | "S">("L");
-  const [hhPath, setHhPath]           = useState<string>("d:\\ISRO\\Proj\\HH.tif");
-  const [hvPath, setHvPath]           = useState<string>("d:\\ISRO\\Proj\\HV.tif");
+  const [band, setBand]               = useState<"L" | "C" | "S">("C");
+  const [hhPath, setHhPath]           = useState<string>("D:\\ISRO\\Proj\\C_Band\\E04_HH_tiles");
+  const [hvPath, setHvPath]           = useState<string>("D:\\ISRO\\Proj\\C_Band\\E04_HV_tiles");
   const [state, setState]             = useState<"IDLE" | "PROCESSING" | "COMPLETE">("IDLE");
   const [data, setData]               = useState<ProcessData | null>(null);
   const [error, setError]             = useState("");
-  const [tab, setTab]                 = useState<"RAW" | "STRETCHED" | "MASK" | "UNET" | "CNN" | "VISION" | "RF">("RAW");
+  const [tab, setTab]                 = useState<"RAW" | "RGB" | "STRETCHED" | "MASK" | "UNET" | "CNN" | "VISION" | "RF">("RAW");
 
   const run = async () => {
     if (!hhPath || !hvPath) { setError("Both HH and HV paths must be provided."); return; }
@@ -61,6 +61,7 @@ export default function Home() {
     fd.append("hh_path", hhPath);
     fd.append("hv_path", hvPath);
     fd.append("band", band);
+    fd.append("run_models", "true");
     try {
       const res  = await fetch("http://127.0.0.1:5000/api/process", { 
         method: "POST", 
@@ -72,8 +73,9 @@ export default function Home() {
       const json = await res.json();
       if (json.error) throw new Error(json.error);
       setData(json); setState("COMPLETE"); setTab("RAW");
-      setTimeout(() => setTab("STRETCHED"), 2000);
-      setTimeout(() => setTab("MASK"),      4200);
+      setTimeout(() => setTab("RGB"),       1500);
+      setTimeout(() => setTab("STRETCHED"), 3000);
+      setTimeout(() => setTab("MASK"),      5000);
     } catch (e: any) { setError(e.message); setState("IDLE"); }
   };
 
@@ -97,14 +99,14 @@ export default function Home() {
               <button key={b} onClick={() => { 
                 setBand(b); 
                 if (b === "C") {
-                  setHhPath("d:\\ISRO\\Proj\\E04_HH_tiles");
-                  setHvPath("d:\\ISRO\\Proj\\E04_HV_tiles");
+                  setHhPath("D:\\ISRO\\Proj\\C_Band\\E04_HH_tiles");
+                  setHvPath("D:\\ISRO\\Proj\\C_Band\\E04_HV_tiles");
                 } else if (b === "L") {
-                  setHhPath("d:\\ISRO\\Proj\\HH.tif");
-                  setHvPath("d:\\ISRO\\Proj\\HV.tif");
+                  setHhPath("D:\\ISRO\\Proj\\HH.tif");
+                  setHvPath("D:\\ISRO\\Proj\\HV.tif");
                 } else {
-                  setHhPath("d:\\ISRO\\Proj\\HH.tif");
-                  setHvPath("d:\\ISRO\\Proj\\HV.tif");
+                  setHhPath("");
+                  setHvPath("");
                 }
                 reset(); 
               }}
@@ -132,7 +134,7 @@ export default function Home() {
                   type="text" 
                   value={hhPath} 
                   onChange={(e) => setHhPath(e.target.value)} 
-                  placeholder="e.g. D:\ISRO\Proj\HH.tif or D:\ISRO\Proj\E04_HH_tiles"
+                  placeholder="e.g. D:\ISRO\Proj\L_Band\HH_tiles"
                   style={{ width: "100%", padding: "10px", marginTop: "5px", background: "#1a1a1a", color: "white", border: "1px solid #333", borderRadius: "6px", fontFamily: "monospace" }} 
                 />
               </label>
@@ -142,7 +144,7 @@ export default function Home() {
                   type="text" 
                   value={hvPath} 
                   onChange={(e) => setHvPath(e.target.value)} 
-                  placeholder="e.g. D:\ISRO\Proj\HV.tif or D:\ISRO\Proj\E04_HV_tiles"
+                  placeholder="e.g. D:\ISRO\Proj\L_Band\HV_tiles"
                   style={{ width: "100%", padding: "10px", marginTop: "5px", background: "#1a1a1a", color: "white", border: "1px solid #333", borderRadius: "6px", fontFamily: "monospace" }} 
                 />
               </label>
@@ -219,21 +221,23 @@ export default function Home() {
               {/* Image Viewer */}
               <section className="card canvas-card">
                 <div className="tab-bar">
-                  {(["RAW","STRETCHED","MASK","UNET","CNN","VISION","RF"] as const).map(t => (
+                  {(["RAW","RGB","STRETCHED","MASK","UNET","CNN","VISION","RF"] as const).map(t => (
                     <button key={t} onClick={() => setTab(t)}
                       className={tab === t ? "tab active" : "tab"}>
                       {t === "RAW" ? "01 Raw " + (data.synth?.raw_label || "HH") : 
-                       t === "STRETCHED" ? "02 Composite" : 
-                       t === "MASK" ? "03 K-Means" :
-                       t === "UNET" ? "04 U-Net" :
-                       t === "CNN" ? "05 CNN" : 
-                       t === "VISION" ? "06 Vision" : "07 RF"}
+                       t === "RGB" ? "02 RGB Colour" :
+                       t === "STRETCHED" ? "03 Composite" : 
+                       t === "MASK" ? "04 K-Means" :
+                       t === "UNET" ? "05 U-Net" :
+                       t === "CNN" ? "06 CNN" : 
+                       t === "VISION" ? "07 Vision" : "08 RF"}
                     </button>
                   ))}
                 </div>
                 <div className="image-stage">
                   <img key={tab} className="sar-img" alt={tab}
                     src={tab === "RAW" ? data.images.raw : 
+                         tab === "RGB" ? data.images.rgb :
                          tab === "STRETCHED" ? data.images.stretched : 
                          tab === "MASK" ? data.images.mask :
                          tab === "UNET" ? data.images.unet :
@@ -242,6 +246,7 @@ export default function Home() {
                   <div className="img-overlay">
                     <span>{data.file_metadata.resolution} px · {band}-Band</span>
                     <span>{tab === "RAW" ? "Linear amplitude stretch" : 
+                           tab === "RGB" ? "RGB Colour Composite" :
                            tab === "STRETCHED" ? "10·log₁₀(σ) composite" : 
                            tab === "MASK" ? "Threshold K-means segmentation" :
                            tab === "UNET" ? "U-Net Semantic Segmentation" :
@@ -332,54 +337,72 @@ export default function Home() {
 
           {data ? (
             <>
-              {/* Classification breakdown */}
-              <section className="card">
-                <div className="card-header">LAND COVER CLASSIFICATION</div>
-                <div className="class-list">
-                  {CLASSES.map(cls => (
-                    <div key={cls.key} className="class-item">
-                      <div className="class-top">
-                        <div className="class-dot" style={{ background: cls.color }}></div>
-                        <span className="class-label">{cls.label}</span>
-                        <span className="class-pct">{(data.classification as any)[cls.pctKey]}%</span>
+              {/* Per-Model Classification + Metrics */}
+              {(() => {
+                const pmc = (data as any).per_model_classification;
+                const models = [
+                  { key: "kmeans", label: "K-Means Physics", icon: "◈", color: "#8e44ad",
+                    acc: null, iou: null, f1: null, latency: null },
+                  ...( data.model_metrics?.map(m => ({
+                    key: m.Model === "U-Net" ? "unet" : m.Model === "CNN (FCN)" ? "cnn" : m.Model === "Vision Transformer" ? "vision" : "rf",
+                    label: m.Model, icon: "◉", color: m.Model === "U-Net" ? "#2980b9" : m.Model === "CNN (FCN)" ? "#16a085" : m.Model === "Vision Transformer" ? "#d35400" : "#27ae60",
+                    acc: m.Accuracy, iou: m.Mean_IoU, f1: m.F1_Score, latency: m.Latency_ms
+                  })) || [] )
+                ];
+                return models.map(m => {
+                  const cls = pmc?.[m.key];
+                  return (
+                    <section key={m.key} className="card" style={{ marginBottom: "8px" }}>
+                      {/* Model Header */}
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 14px", borderBottom: "1px solid #1a1a1a" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                          <span style={{ color: m.color, fontSize: "14px" }}>{m.icon}</span>
+                          <span style={{ fontSize: "11px", fontWeight: 600, color: "#e0e0e0", letterSpacing: "0.05em" }}>{m.label.toUpperCase()}</span>
+                        </div>
+                        {m.latency !== null && (
+                          <span style={{ fontSize: "10px", color: "#e67e22", fontFamily: "monospace", background: "#1a1000", padding: "2px 6px", borderRadius: "3px" }}>{m.latency}ms</span>
+                        )}
                       </div>
-                      <div className="bar-bg">
-                        <div className="bar-fill" style={{ width: (data.classification as any)[cls.pctKey] + "%", background: cls.color }}></div>
-                      </div>
-                      <div className="class-px">{((data.classification as any)[cls.pxKey] as number).toLocaleString()} px</div>
-                    </div>
-                  ))}
-                </div>
-              </section>
 
-              {/* Model Performance Metrics */}
-              <section className="card">
-                <div className="card-header">MODEL PERFORMANCE METRICS</div>
-                <div style={{ padding: "12px 16px" }}>
-                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "11px", textAlign: "left" }}>
-                    <thead>
-                      <tr style={{ color: "#666", borderBottom: "1px solid #222" }}>
-                        <th style={{ paddingBottom: "6px", fontWeight: 500 }}>Model</th>
-                        <th style={{ paddingBottom: "6px", fontWeight: 500 }}>Acc</th>
-                        <th style={{ paddingBottom: "6px", fontWeight: 500 }}>IoU</th>
-                        <th style={{ paddingBottom: "6px", fontWeight: 500 }}>F1</th>
-                        <th style={{ paddingBottom: "6px", textAlign: "right", fontWeight: 500 }}>Latency</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {data.model_metrics?.map(m => (
-                        <tr key={m.Model} style={{ borderBottom: "1px solid #111" }}>
-                          <td style={{ color: "#aaa", padding: "6px 0" }}>{m.Model}</td>
-                          <td style={{ color: "#e8e8e8", fontFamily: "monospace" }}>{m.Accuracy.toFixed(3)}</td>
-                          <td style={{ color: "#e8e8e8", fontFamily: "monospace" }}>{m.Mean_IoU.toFixed(3)}</td>
-                          <td style={{ color: "#e8e8e8", fontFamily: "monospace" }}>{m.F1_Score.toFixed(3)}</td>
-                          <td style={{ color: "#e67e22", fontFamily: "monospace", textAlign: "right" }}>{m.Latency_ms}ms</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </section>
+                      {/* Accuracy row (not for K-Means) */}
+                      {m.acc !== null && (
+                        <div style={{ display: "flex", justifyContent: "space-around", padding: "8px 0", borderBottom: "1px solid #111" }}>
+                          {[["Acc", m.acc], ["IoU", m.iou], ["F1", m.f1]].map(([label, val]) => (
+                            <div key={String(label)} style={{ textAlign: "center" }}>
+                              <div style={{ fontSize: "13px", fontFamily: "monospace", color: "#fff", fontWeight: 600 }}>{(val as number).toFixed(3)}</div>
+                              <div style={{ fontSize: "9px", color: "#555", marginTop: "2px", letterSpacing: "0.06em" }}>{label}</div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {m.acc === null && (
+                        <div style={{ padding: "6px 14px 2px", fontSize: "9px", color: "#555", letterSpacing: "0.05em" }}>THRESHOLD-BASED · NO TRAINING REQUIRED</div>
+                      )}
+
+                      {/* Land Cover Breakdown */}
+                      {cls && (
+                        <div style={{ padding: "8px 14px 10px" }}>
+                          {CLASSES.map(c => (
+                            <div key={c.key} style={{ marginBottom: "6px" }}>
+                              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "3px" }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+                                  <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: c.color, flexShrink: 0 }}></div>
+                                  <span style={{ fontSize: "10px", color: "#aaa" }}>{c.label}</span>
+                                </div>
+                                <span style={{ fontSize: "10px", fontFamily: "monospace", color: "#e0e0e0" }}>{cls[c.pctKey]}%</span>
+                              </div>
+                              <div style={{ height: "3px", background: "#1a1a1a", borderRadius: "2px" }}>
+                                <div style={{ height: "3px", borderRadius: "2px", background: c.color, width: cls[c.pctKey] + "%", transition: "width 0.5s ease" }}></div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </section>
+                  );
+                });
+              })()}
+
 
               {/* dB Histogram */}
               <section className="card chart-card">
